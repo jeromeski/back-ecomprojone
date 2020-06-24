@@ -1,13 +1,13 @@
 const express = require('express');
-
 const mongoose = require('mongoose');
 require('dotenv').config();
-// import routes
-const userRoutes = require('./routes/user');
 
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+
+// import routes
+const userRoutes = require('./routes/user');
 
 // app
 const app = express();
@@ -19,7 +19,10 @@ mongoose
     useCreateIndex: true,
     useUnifiedTopology: true
   })
-  .then(() => console.log('DB Connected')).catch(err => {console.log(err)})
+  .then(() => console.log('DB Connected'))
+  .catch(err => {
+    console.log(err);
+  });
 
 mongoose.connection.on('error', err => {
   console.log('DB connection error: ${err.message}');
