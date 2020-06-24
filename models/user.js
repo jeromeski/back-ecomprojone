@@ -32,4 +32,38 @@ const userSchema = new mongoose.Schema({
     type: Array,
     default: []
   }
-}, {timestamps: true})
+}, {timestamps: true});
+
+// virtual field
+
+// password <-- from the client side
+userSchema.virtual('password')
+// take password from the client side
+.set(function(password) {
+  // temporary variable this._password
+  this._password = password;
+  // will be used to hash the password
+  this.salt = uuidv1();
+  // encrypt hashed_password
+  this.hashed_password = this.encryptPassword(password)
+})
+.get(function() {
+  return this._password
+});
+
+userSchema.methods = {
+  encryptPassword: function(password) {
+    if(!password) return '';
+    try {
+      return crypto.createHmac('sha1', this.salt)
+      .update(password)
+      .digest('hex')
+    } catch (err) {
+      return ''
+    }
+  }
+};
+
+// We call model User
+// and it's based on userSchema
+module.exports = mongoose.model('User', userSchema)
