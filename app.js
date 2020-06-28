@@ -26,7 +26,7 @@ mongoose
   });
 
 mongoose.connection.on('error', err => {
-  console.log('DB connection error: ${err.message}');
+  console.log(`DB connection error: ${err.message}`);
 });
 
 // middlewares
