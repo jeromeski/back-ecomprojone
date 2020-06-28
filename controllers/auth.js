@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken'); // to generate signed token
 const expressJwt = require('express-jwt');
+const { errorHandler } = require('../helpers/dbErrorHandler');
 
 exports.signup = (req, res) => {
   // console.log('req.body', req.body);
@@ -8,7 +9,7 @@ exports.signup = (req, res) => {
   user.save((err, user) => {
     if (err) {
       return res.status(400).json({
-        err
+        err: errorHandler(err)
       });
     }
     res.json({
@@ -51,7 +52,7 @@ exports.signout = (req, res) => {
 exports.requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
   userProperty: 'auth'
-})
+});
 
 exports.isAuth = (req, res, next) => {
   let user = req.profile && req.auth && req.profile._id == req.auth._id;

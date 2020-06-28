@@ -24,3 +24,11 @@ compartmentalize your app into smaller pieces.
 =============== 
 is a MongoDB object modeling tool that provides a schema-based solution to model application data. It includes built-in type casting, validation, query building, and business logic hooks. Using Mongoose with this backend stack provides a higher layer over MongoDB with more functionality, including mapping object
 models to database documents.
+
+
+# express.Router() 
+is used to define route paths with the relevant HTTP methods and
+assign the corresponding controller function that should be called when these
+requests are received by the server.
+ex. router.get('/sikwet', sikwet)
+
