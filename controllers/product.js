@@ -18,7 +18,7 @@ exports.productById = (req, res, next, id) => {
 };
 
 exports.read = (req, res) => {
-  console.log(req)
+  console.log(req);
   req.product.photo = undefined;
   return res.json(req.product);
 };
@@ -115,9 +115,9 @@ exports.update = (req, res) => {
       });
     }
 
-    let product = req.product
+    let product = req.product;
 
-    product = _.extend(product, fields)
+    product = _.extend(product, fields);
 
     // 1kb = 1000
     // 1mb = 1000000
@@ -142,4 +142,31 @@ exports.update = (req, res) => {
       res.json(result);
     });
   });
+};
+
+/*
+ * sell / arrival
+ * by sell = /products?sortBy=sold&order=desc&limit=4
+ * by arrival = /products?sortBy=createdAt&order=desc&limit=4
+ * if no params are sent, then all products are returned
+ */
+
+exports.list = (req, res) => {
+  let order = req.query.order ? req.query.order : 'asc';
+  let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
+  let limit = req.query.limit ? req.query.limit : 6;
+
+  Product.find()
+    .select('-photo')
+    .populate('category')
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .exec((err, data) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Products not found'
+        });
+      }
+      res.send(products);
+    });
 };
